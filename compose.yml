@@ -1,0 +1,58 @@
+services:
+  adminer:
+    image: adminer
+    container_name: adminer_c
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - red_bd
+
+  postgres:
+    image: postgres:latest
+    container_name: postgre_c
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: "123"
+    ports:
+      - "5555:5432"
+    volumes:
+      - postgre_data:/var/lib/postgresql/data
+    networks:
+      - red_bd
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_c
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "admin"
+    ports:
+      - "3707:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - red_bd
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo_c
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "admin"
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - red_bd
+
+volumes:
+  mongo_data:
+  postgre_data:
+  mysql_data:
+
+networks:
+  red_bd:
+    driver: bridge
